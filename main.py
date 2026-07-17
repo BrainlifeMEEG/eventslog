@@ -61,7 +61,7 @@ report.add_events(events, sfreq=raw.info['sfreq'], first_samp=raw.first_samp, ti
 
 
 # save report
-report.save('out_report/report.html', overwrite=True)
+report.save('out_report/report.html', overwrite=True, verbose=False)
 
 # create product.json
 product_items = []
