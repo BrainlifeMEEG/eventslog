@@ -69,5 +69,5 @@ fig = mne.viz.plot_events(events, sfreq=raw.info['sfreq'],
                           first_samp=raw.first_samp)
 fig_path = "out_figs/events.png"
 fig.savefig(fig_path)
-add_image_to_product(product_items, "Events", fig_path)
+add_image_to_product(product_items, "Events", filepath=fig_path)
 create_product_json(product_items)
