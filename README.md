@@ -1,5 +1,54 @@
 # Brainlife App for MNE-Python event detection
 
+<!-- brainlife-app:begin (generated from the App manifest; edit the manifest, not this block) -->
+
+> **Detects events in the stim channel of continuous MEG/EEG data with mne.find_events and writes them to a BIDS events.tsv with a plot and an MNE report.**
+
+Loads a raw .fif file, runs mne.find_events with the configured options (stim channel, onset/offset, minimum duration, mask and so on), saves the events as a BIDS-compliant events.tsv, and adds an events plot to an MNE HTML report and the product thumbnail. Use it to inspect triggers before epoching. Note: the report is written to out_report/report.html while the registered output is out_dir_report.
+
+| | |
+|---|---|
+| 📥 **Inputs** | `neuro/meeg/mne/raw` |
+| 📤 **Outputs** | `report/html` · `neuro/meg/fif-override` |
+| 🐳 **Container** | `brainlifemeeg/mne:1.12.1` |
+| ⚙️ **Resources** | 1 CPUs |
+| 🔗 **Run it** | [doi.org/10.25663/brainlife.app.735](https://doi.org/10.25663/brainlife.app.735) |
+
+#### 📥 Inputs
+
+| Input | Datatype | Required | Description |
+|---|---|---|---|
+| `fif` | `neuro/meeg/mne/raw` | yes | Continuous MEG/EEG recording in MNE raw .fif format. |
+
+#### 📤 Outputs
+
+| Output | Datatype | Description |
+|---|---|---|
+| `out_dir_report` | `report/html` | MNE HTML report with a plot of the detected events. |
+| `out_dir` | `neuro/meg/fif-override` | BIDS events.tsv with the detected events. |
+
+<details>
+<summary><b>⚙️ Parameters</b> (9)</summary>
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `stim_channel` | string |  | `None` \| `str` \| `list of str` Name of the stim channel or all the stim channels affected by triggers. If None, the config variables ‘MNE_STIM_CHANNEL’, ‘MNE_STIM_CHANNEL_1’, ‘MNE_STIM_CHANNEL_2’, etc. are read. If these are not found, it will fall back to ‘STI 014’ if present, then fall back to the first channel of type ‘stim’, if present. If multiple channels are provided then the returned events are the union of all the events extracted from individual stim channels. |
+| `output` | string | `onset` | ‘onset’ \| ‘offset’ \| ‘step’ Whether to report when events start, when events end, or both. |
+| `consecutive` | string | `increasing` | `bool` \| ‘increasing’ If True, consider instances where the value of the events channel changes without first returning to zero as multiple events. If False, report only instances where the value of the events channel changes from/to zero. If ‘increasing’, report adjacent events only when the second event code is greater than the first. |
+| `min_duration` | number | `0` | `float` The minimum duration of a change in the events channel required to consider it as an event (in seconds). |
+| `shortest_event` | number | `2` | `int` Minimum number of samples an event must last (default is 2). If the duration is less than this an exception will be raised. |
+| `mask` | number | `0` | `int` \| `None` The value of the digital mask to apply to the stim channel values. If None (default), no masking is performed. |
+| `uint_cast` | boolean | `false` | `bool` If True (default False), do a cast to uint16 on the channel data. This can be used to fix a bug with STI101 and STI014 in Neuromag acquisition setups that use channel STI016 (channel 16 turns data into e.g. -32768), similar to mne_fix_stim14 --32 in MNE-C. |
+| `mask_type` | string | `and` | ‘and’ \| ‘not_and’ The type of operation between the mask and the trigger. Choose ‘and’ (default) for MNE-C masking behavior. |
+| `initial_event` | boolean | `false` | `bool` If True (default False), an event is created if the stim channel has a value different from 0 as its first sample. This is useful if an event at t=0s is present. |
+
+</details>
+
+📚 **References used by this App:**
+- Gramfort A, et al. MEG and EEG data analysis with MNE-Python. Front Neurosci 7(267):1-13 (2013). [doi:10.3389/fnins.2013.00267](https://doi.org/10.3389/fnins.2013.00267)
+
+<!-- brainlife-app:end -->
+
 [![Run on Brainlife.io](https://img.shields.io/badge/Brainlife-bl.app.735-blue.svg)](https://doi.org/10.25663/brainlife.app.735)
 
 ## Description
